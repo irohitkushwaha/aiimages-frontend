@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import {
   Dialog,
@@ -12,20 +11,8 @@ import {
   PopoverGroup,
   PopoverPanel,
 } from "@headlessui/react";
-import {
-  ArrowPathIcon,
-  Bars3Icon,
-  ChartPieIcon,
-  CursorArrowRaysIcon,
-  FingerPrintIcon,
-  SquaresPlusIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
-import {
-  ChevronDownIcon,
-  PhoneIcon,
-  PlayCircleIcon,
-} from "@heroicons/react/20/solid";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import Link from "next/link";
 
 const products = [
@@ -70,13 +57,13 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="bg-gray-50">
+    <header className="bg-white">
       <nav
         aria-label="Global"
         className="flex items-center justify-between p-6 lg:px-8 lg:py-4 shadow-md shadow-gray-300"
       >
         <div className="flex lg:flex-1">
-          <a href="#" className="-m-1.5 p-1.5">
+          <a href="/" className="-m-1.5 p-1.5">
             <span className="hidden">AI Generated Images</span>
             <img
               alt="Logo of AI Generated Images"
@@ -130,7 +117,10 @@ export default function Header() {
             </PopoverPanel>
           </Popover>
 
-          <a href="/pricing" className="text-[16px] font-semibold text-gray-800">
+          <a
+            href="/pricing"
+            className="text-[16px] font-semibold text-gray-800"
+          >
             Pricing
           </a>
           <a href="/upload" className="text-[16px] font-semibold text-gray-800">
@@ -139,7 +129,10 @@ export default function Header() {
         </PopoverGroup>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
           <a href="/login" className="text-[16px] font-semibold text-gray-800">
-            Log in <span className="text-[22px]" aria-hidden="true">&rarr;</span>
+            Log in{" "}
+            <span className="text-[22px]" aria-hidden="true">
+              &rarr;
+            </span>
           </a>
         </div>
       </nav>
