@@ -60,7 +60,7 @@ export default function Header() {
     <header className="bg-white">
       <nav
         aria-label="Global"
-        className="flex items-center justify-between p-6 lg:px-8 lg:py-4 shadow-md shadow-gray-300"
+        className="flex items-center justify-between p-6 lg:px-8 lg:py-4 shadow-sm shadow-gray-300"
       >
         <div className="flex lg:flex-1">
           <a href="/" className="-m-1.5 p-1.5">
@@ -84,7 +84,7 @@ export default function Header() {
         </div>
         <PopoverGroup className="hidden lg:flex lg:gap-x-12">
           <Popover className="relative">
-            <PopoverButton className="flex items-center gap-x-1 text-[16px] font-semibold text-gray-800">
+            <PopoverButton className="flex items-center gap-x-1 text-[16px] font-semibold text-gray-800 cursor-pointer">
               Categories
               <ChevronDownIcon
                 aria-hidden="true"

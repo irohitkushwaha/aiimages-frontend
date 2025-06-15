@@ -3,7 +3,17 @@ import Link from "next/link";
 
 export default function AboutUs() {
   return (
-    <div className="relative w-full mx-auto px-6 py-12 bg-white">
+    <div className="relative w-full mx-auto px-6 py-12">
+      <div
+        className="absolute inset-0 opacity-40 -z-10"
+        style={{
+          backgroundImage: `
+              linear-gradient(to bottom, rgba(156, 163, 175, 0.5) 1px, rgba(229, 231, 235, 0.2) 1px),
+              linear-gradient(to right, rgba(156, 163, 175, 0.5) 1px, rgba(229, 231, 235, 0.2) 1px)
+            `,
+          backgroundSize: "100px 100px",
+        }}
+      />
       <h1 className="text-4xl mx-auto max-w-4xl font-bold text-gray-900 border-b-4 border-blue-500 pb-4 mb-12">
         About us - AI Generated Images
       </h1>
@@ -197,16 +207,6 @@ export default function AboutUs() {
           </div>
         </section>
       </div>
-      <div
-        className="absolute inset-0 opacity-40"
-        style={{
-          backgroundImage: `
-              linear-gradient(to bottom, rgba(156, 163, 175, 0.5) 1px, rgba(229, 231, 235, 0.2) 1px),
-              linear-gradient(to right, rgba(156, 163, 175, 0.5) 1px, rgba(229, 231, 235, 0.2) 1px)
-            `,
-          backgroundSize: "100px 100px",
-        }}
-      />
     </div>
   );
 }
