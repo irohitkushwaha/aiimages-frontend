@@ -31,7 +31,7 @@ const PricingPage = () => {
     },
    ];
   return (
-    <div className="min-h-screen bg-white py-16 px-5">
+    <div className="min-h-screen bg-white py-16 px-5 relative">
       <div
         className="absolute inset-0 opacity-40"
         style={{
