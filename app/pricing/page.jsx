@@ -1,3 +1,11 @@
+// app/pricing/page.jsx
+export async function generateMetadata() {
+  return {
+    title: "Pricing plan - AI Generated Images",
+    description: "Explore our flexible pricing plans for Downloading or accessing Ai Generated Images. Compare features and choose the plan that suits your needs.",
+    robots: "index, follow"
+  };
+}
 const PricingPage = () => {
   const pricingPlans = [
     {

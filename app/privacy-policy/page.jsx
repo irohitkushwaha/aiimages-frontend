@@ -1,3 +1,11 @@
+export async function generateMetadata() {
+  return {
+    title: "Privacy Policy - AI Generated Images",
+    description: "Learn how we protect your data and privacy when using our AI image generation platform. Understand our data collection, storage, and sharing practices.",
+    robots: "index, follow"
+  };
+}
+
 // This is a Server Component (no 'use client')
 import { Shield, Eye, Database, Lock, Users, Mail, AlertCircle, FileText } from 'lucide-react';
 

@@ -1,3 +1,12 @@
+// app/faq/page.jsx
+export async function generateMetadata() {
+  return {
+    title: "FAQ - AI Generated Images",
+    description: "Find answers to common questions about AI Generated Photos Platform, pricing, usage, and technical requirements.",
+    robots: "index, follow"
+  };
+}
+
 // This is a Server Component (no 'use client')
 import Link from "next/link";
 import FAQAccordion from "@/components/features/faqaccordion";

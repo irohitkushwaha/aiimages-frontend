@@ -1,3 +1,12 @@
+// app/about-us/page.jsx
+export async function generateMetadata() {
+  return {
+    title: "About Us - AI Generated Images",
+    description: "Learn about our mission to revolutionize digital content creation through AI technology. Discover our team and values.",
+    robots: "index, follow"
+  };
+}
+
 import React from "react";
 import Link from "next/link";
 

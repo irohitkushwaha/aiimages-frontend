@@ -1,3 +1,12 @@
+// app/refund-policy/page.jsx
+export async function generateMetadata() {
+  return {
+    title: "Refund Policy - AI Generated Images",
+    description: "Understand our refund and cancellation policies for AI image generation services. Learn about eligibility and process for refunds.",
+    robots: "index, follow"
+  };
+}
+
 // This is a Server Component (no 'use client')
 import Link from "next/link";
 import {
@@ -16,7 +25,7 @@ export default function RefundPolicyPage() {
         {/* Header */}
         <header className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Refund Policy
+            Refund Policy - Ai Generated Images
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Clear information about when and how you can get a refund for

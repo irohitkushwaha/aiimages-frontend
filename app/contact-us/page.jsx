@@ -1,108 +1,11 @@
-// import { Mail, Phone, MessageSquare, Send, CheckCircle, AlertCircle, MapPin, Clock } from 'lucide-react';
-// import ContactForm from '@/components/features/contactform';
-// export default function ContactUsPage() {
-//   const relatedToOptions = [
-//     { value: '', label: 'Select a topic...' },
-//     { value: 'account', label: 'Account Issues' },
-//     { value: 'download', label: 'Download Problems' },
-//     { value: 'payment', label: 'Payment & Billing' },
-//     { value: 'licensing', label: 'Licensing Questions' },
-//     { value: 'contributor', label: 'Contributor Program' },
-//     { value: 'custom', label: 'Custom Image Requests' },
-//     { value: 'technical', label: 'Technical Support' },
-//     { value: 'feedback', label: 'Feedback & Suggestions' },
-//     { value: 'other', label: 'Other' }
-//   ];
-
-//   return (
-//     <div className="min-h-screen bg-gray-50 py-12">
-//       <div className="max-w-6xl mx-auto px-6">
-//         {/* Header */}
-//         <header className="text-center mb-12">
-//           <h1 className="text-4xl font-bold text-gray-900 mb-4">
-//             Contact Us
-//           </h1>
-//           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-//             Get in touch with our support team for help with AI-generated images, licensing, or any questions
-//           </p>
-//         </header>
-
-//         <div className="grid lg:grid-cols-3 gap-8">
-//           {/* Contact Information */}
-//           <div className="lg:col-span-1 space-y-6">
-//             {/* Email Support */}
-//             <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
-//               <div className="flex items-center mb-4">
-//                 <Mail className="w-6 h-6 text-blue-600 mr-3" />
-//                 <h3 className="text-xl font-bold text-gray-900">Email Support</h3>
-//               </div>
-//               <p className="text-gray-600 mb-3">
-//                 Send us an email and we'll respond within 24 hours
-//               </p>
-//               <a 
-//                 href="mailto:support@aigeneratedimagess.com"
-//                 className="text-blue-600 hover:text-blue-700 font-medium break-all"
-//               >
-//                 support@aigeneratedimagess.com
-//               </a>
-//             </div>
-
-//             {/* Response Time */}
-//             <div className="bg-green-50 rounded-lg p-6 border border-green-200">
-//               <div className="flex items-center mb-4">
-//                 <Clock className="w-6 h-6 text-green-600 mr-3" />
-//                 <h3 className="text-xl font-bold text-green-900">Response Time</h3>
-//               </div>
-//               <div className="space-y-2 text-green-800">
-//                 <p>• <strong>General Queries:</strong> Within 24 hours</p>
-//                 <p>• <strong>Technical Issues:</strong> Within 12 hours</p>
-//                 <p>• <strong>Urgent Problems:</strong> Within 4 hours</p>
-//               </div>
-//             </div>
-
-//             {/* Support Categories */}
-//             <div className="bg-blue-50 rounded-lg p-6 border border-blue-200">
-//               <div className="flex items-center mb-4">
-//                 <MessageSquare className="w-6 h-6 text-blue-600 mr-3" />
-//                 <h3 className="text-xl font-bold text-blue-900">What We Help With</h3>
-//               </div>
-//               <ul className="space-y-2 text-blue-800 text-sm">
-//                 <li>• Account and login issues</li>
-//                 <li>• Download and payment problems</li>
-//                 <li>• Licensing and copyright questions</li>
-//                 <li>• Custom image generation requests</li>
-//                 <li>• Contributor program inquiries</li>
-//                 <li>• Technical troubleshooting</li>
-//                 <li>• General platform feedback</li>
-//               </ul>
-//             </div>
-//           </div>
-
-//           {/* Contact Form */}
-//           <div className="lg:col-span-2">
-//             <ContactForm relatedToOptions={relatedToOptions} />
-//           </div>
-//         </div>
-
-//         {/* Additional Information */}
-//         <div className="mt-12 bg-gradient-to-r from-gray-900 to-gray-800 rounded-lg p-8 text-center">
-//           <h2 className="text-2xl font-bold text-white mb-4">
-//             Need Immediate Help?
-//           </h2>
-//           <p className="text-white mb-6 text-lg">
-//             Check out our FAQ section for quick answers to common questions
-//           </p>
-//           <a href="/faq" className="inline-block">
-//             <button className="bg-white text-gray-900 font-medium px-8 py-3 rounded-lg hover:bg-gray-100 transition-colors">
-//               Visit FAQ
-//             </button>
-//           </a>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
-
+// app/contact-us/page.jsx
+export async function generateMetadata() {
+  return {
+    title: "Contact Us - AI Generated Images",
+    description: "Get in touch with our support team. Find contact information and support options for AI image Generated Images.",
+    robots: "index, follow"
+  };
+}
 
 import { Mail, Phone, MessageSquare, Send, CheckCircle, AlertCircle, MapPin, Clock, HelpCircle, Shield, Users } from 'lucide-react';
 import ContactFormClient from '@/components/features/contactform';

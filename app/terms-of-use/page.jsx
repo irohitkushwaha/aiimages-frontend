@@ -1,3 +1,10 @@
+export async function generateMetadata() {
+  return {
+    title: "Terms of use - Ai Generated Images",
+    description: "Understand our platform rules for uploading and using AI-generated images. Learn about user rights, content guidelines, and platform usage policies.",
+    robots: "index, follow",
+  };
+}
 // This is a Server Component (no 'use client')
 import { FileText, Users, Shield, AlertCircle, Check, X } from 'lucide-react';
 import Link from 'next/link';
