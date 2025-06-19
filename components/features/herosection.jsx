@@ -18,13 +18,13 @@ const HeroSection = () => {
         />
 
         {/* Hero Content */}
-        <div className="relative z-10 flex mt-[70px] mb-[70px]">
-          <div className="max-w-7xl mx-auto px-8 flex flex-col gap-[30px]">
+        <div className="relative z-10 flex md:mt-[70px] mt-[30px] mb-[50px] md:mb-[70px]">
+          <div className="max-w-7xl mx-auto px-8 flex flex-col md:gap-[30px] gap-[10px]">
             <div className="max-w-3xl">
               {/* <p className="text-6xl md:text-4xl font-bold text-gray-900 mb-8 leading-tight text-center">
                 Explore Ultra Realistic
               </p> */}
-              <h1 className="text-6xl md:text-6xl font-bold text-gray-900 mb-8 leading-tight text-center">
+              <h1 className="text-2xl md:text-5xl font-bold text-gray-900 mb-8 md:leading-tight leading-[36px] text-center">
                 Explore Ultra Realistic AI Generated Images Collections
               </h1>
               {/* <p className="text-6xl md:text-4xl font-bold text-gray-900 mb-8 leading-tight text-center">

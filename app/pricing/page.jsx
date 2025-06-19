@@ -39,7 +39,7 @@ const PricingPage = () => {
     },
    ];
   return (
-    <div className="min-h-screen bg-white py-16 px-5 relative">
+    <div className="min-h-screen bg-white md:py-16 py-[30px] md:px-[20px] px-[10px] relative">
       <div
         className="absolute inset-0 opacity-40"
         style={{
@@ -52,11 +52,11 @@ const PricingPage = () => {
       />
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-16 flex flex-col gap-[50px]">
-          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+        <div className="text-center mb-16 flex flex-col gap-[30px] md:gap-[50px]">
+          <h1 className="text-2xl md:text-5xl font-bold text-gray-900 md:mb-8 md:leading-tight leading-[36px] text-center">
             AI-powered images that makes customers buy.
           </h1>
-          <p className="text-2xl md:text-4xl font-bold text-gray-700 mb-6 leading-tight">
+          <p className="text-xl md:text-4xl font-bold text-gray-700 md:mb-6 leading-tight">
             Choose your plan and start converting today
           </p>
         </div>

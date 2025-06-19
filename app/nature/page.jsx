@@ -1,16 +1,16 @@
-// app/technology/page.jsx
+// app/travel/page.jsx
 export async function generateMetadata() {
     return {
-      title: "Technology AI Images - Tech & Innovation Photos",
-      description: "Explore AI-generated technology images for tech companies, innovation, and digital products. Perfect for tech marketing and product presentations.",
-      keywords: "technology ai images, tech photos, innovation images, digital products, ai generated technology photos",
+      title: "Travel AI Images - Destination & Adventure Photos",
+      description: "Discover AI-generated travel images for destinations, adventures, and travel content. Perfect for travel marketing and destination guides.",
+      keywords: "travel ai images, destination photos, adventure images, travel marketing, ai generated travel photos",
       robots: "index, follow"
     };
   }
 
-import { getCategoryImages } from "@/api/getCategoryImages";
+  import { getCategoryImages } from "@/api/getCategoryImages";
 
-  export default async function Technology() {
+  export default async function Nature() {
     const categoryMap = [
       { fullCategory: "Business", shortCategory: "business" },
       { fullCategory: "Finance", shortCategory: "finance" },
@@ -28,11 +28,12 @@ import { getCategoryImages } from "@/api/getCategoryImages";
       const found = categoryMap.find((c) => c.fullCategory === fullCategory);
       return found ? found.shortCategory : null;
     }
-    const images = await getCategoryImages("Technology");
+    const images = await getCategoryImages("Travel, Lifestyle & Nature");
     return (
       <div>
         <h1 className="text-center font-bold md:text-[32px] text-[27px] text-gray-900 py-[30px] capitalize px-[10px]">
-        Best Technology Images - AI Generated Images
+        Best Travel, Lifestyle & Nature Images - AI Generated Photos
+
         </h1>{" "}
         <section
           // className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 px-[20px]  pb-[50px] auto-rows-min"

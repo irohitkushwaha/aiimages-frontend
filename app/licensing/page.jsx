@@ -1,4 +1,13 @@
 // This is a Server Component (no 'use client')
+export async function generateMetadata() {
+  return {
+    title: "Licensing Terms - AI Generated Images",
+    description:
+      "Licensing Terms for AI-generated Images Platform",
+    robots: "index, follow",
+  };
+}
+
 import Link from 'next/link';
 import { AlertTriangle, Shield, FileText, Users } from 'lucide-react';
 

@@ -202,7 +202,7 @@ export default function AboutUs() {
           <p className="text-gray-300 mb-6">
             Browse our collection or start contributing today.
           </p>
-          <div className="space-x-4">
+          <div className="flex flex-col md:flex-row gap-8 justify-center items-center space-x-4">
             <Link href="/">
               <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-3 rounded-lg transition-colors">
                 Browse Images

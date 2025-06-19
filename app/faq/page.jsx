@@ -114,7 +114,7 @@ export default function FAQPage() {
               Our support team is here to help you get the most out of AI
               Generated Images Platform
             </p>
-            <div className="space-x-4">
+            <div className="flex flex-col md:flex-row gap-8 justify-center items-center space-x-4">
               <Link href="/contact-us">
                 <button className="bg-white border-2 border-gray-900 text-gray-900 font-medium px-6 py-3 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors cursor-pointer">
                   Contact Support
