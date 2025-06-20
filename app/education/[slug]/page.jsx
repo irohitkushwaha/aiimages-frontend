@@ -80,7 +80,7 @@ async function ImagePage({ params }) {
               {imageData.mainImage.Caption}
             </figcaption>
             <a
-              href={`http://localhost:9000/api/image/download?url=${encodeURIComponent(
+              href={`https://api.aigeneratedimagess.com/api/image/download?url=${encodeURIComponent(
                 imageData.mainImage.ImageFile
               )}`}
               download
