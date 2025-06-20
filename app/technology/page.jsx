@@ -1,4 +1,6 @@
 // app/technology/page.jsx
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata() {
     return {
       title: "Technology AI Images - Tech & Innovation Photos",

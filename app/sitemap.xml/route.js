@@ -1,4 +1,5 @@
 // app/sitemap.xml/route.js
+export const dynamic = 'force-dynamic';
 import BASE_URL from "@/api/baseUrl";
 export async function GET() {
     const baseUrl = 'https://aigeneratedimagess.com';

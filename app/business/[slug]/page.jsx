@@ -3,33 +3,43 @@ import { getImageWithSimilar } from "@/api/getImageWithSimilar";
 import Button from "@/components/ui/button";
 import { notFound } from "next/navigation";
 
-export async function generateMetadata({ params }) {
-  const { slug } = await params;
-  const imageData = await getImageWithSimilar(slug);
+export const dynamic = "force-dynamic";
 
-  return {
-    title: imageData.mainImage.PageTitle,
-    description: imageData.mainImage.PageDescription,
-    robots: "index, follow",
-    openGraph: {
+export async function generateMetadata({ params }) {
+  try {
+    const { slug } = await params;
+    const imageData = await getImageWithSimilar(slug);
+
+    return {
       title: imageData.mainImage.PageTitle,
       description: imageData.mainImage.PageDescription,
-      images: [
-        {
-          url: imageData.mainImage.ImageFile,
-          width: 1200,
-          height: 630,
-          alt: imageData.mainImage.Alt,
-        },
-      ],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: imageData.mainImage.PageTitle,
-      description: imageData.mainImage.PageDescription,
-      images: [imageData.mainImage.ImageFile],
-    },
-  };
+      robots: "index, follow",
+      openGraph: {
+        title: imageData.mainImage.PageTitle,
+        description: imageData.mainImage.PageDescription,
+        images: [
+          {
+            url: imageData.mainImage.ImageFile,
+            width: 1200,
+            height: 630,
+            alt: imageData.mainImage.Alt,
+          },
+        ],
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: imageData.mainImage.PageTitle,
+        description: imageData.mainImage.PageDescription,
+        images: [imageData.mainImage.ImageFile],
+      },
+    };
+  } catch (error) {
+    return {
+      title: "Image Not Found",
+      description: "The requested image could not be found",
+      robots: "noindex, nofollow",
+    };
+  }
 }
 
 async function ImagePage({ params }) {

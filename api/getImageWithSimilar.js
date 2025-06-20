@@ -5,7 +5,7 @@ export async function getImageWithSimilar(slug) {
   console.log("slug value is inside api call fn ", slug)
 
   if (!slug) {
-    throw new Error("Slug is required");
+    throw new Error("Slug is required from frontend");
   }
 
   const res = await fetch(`${BASE_URL}/image/image-with-similar?slug=${encodeURIComponent(slug)}`, {
