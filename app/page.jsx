@@ -1,37 +1,3 @@
-// import HeroSection from "../components/features/herosection";
-// import ImagesList from "@/components/features/imagesList";
-// import Button from "@/components/ui/button";
-// export async function generateMetadata() {
-//   return {
-//     title: "Ai Generated Images - Ultra Realistic Collections",
-//     description:
-//       "Explore or Download High Quality Ai Generated Photos/Images/Pictures Collections for free and copyright/Royalty free Images",
-//     keywords: "Ai Generated Images, Ai Created Images, Ai Generated Photos, Ai Generated Pictures",
-//     robots: "index, follow",
-//     openGraph: {
-//       type: 'website',
-//       url: 'https://aigeneratedimagess.com',
-//       title: 'AI Generated Images - Ultra Realistic Collections',
-//       description: "Explore or Download High Quality Ai Generated Photos/Images/Pictures Collections for free and copyright/Royalty free Images",
-//       images: ['/AILOGO.png']
-//     },
-//     twitter: {
-//       card: 'summary_large_image',
-//       title: 'AI Generated Images - Ultra Realistic Collections',
-//       description: "Explore or Download High Quality Ai Generated Photos/Images/Pictures Collections for free and copyright/Royalty free Images",
-//     }
-//   };
-// }
-
-// export default function Home() {
-//   return (
-//     <div className="pb-[50px]">
-//       <HeroSection />
-//       <ImagesList />
-//       <Button>Load more ...</Button>
-//     </div>
-//   );
-// }
 
 import HeroSection from "../components/features/herosection";
 import ImagesList from "@/components/features/imagesList";
@@ -39,7 +5,7 @@ import { getHomepageImages } from "@/api/getHomepageImages";
 
 export async function generateMetadata() {
   return {
-    title: "Ai Generated Images - Ultra Realistic Collections",
+    title: "Ai Generated Images", //
     description:
       "Explore or Download High Quality Ai Generated Photos/Images/Pictures Collections for free and copyright/Royalty free Images",
     keywords:
@@ -65,8 +31,6 @@ export async function generateMetadata() {
 export default async function Home() {
   // Fetch initial images on the server (SSR)
   const initialImages = await getHomepageImages(0);
-
-  console.log("value of intialimages in page.jsx is", initialImages)
   //   {
   //     _id: 1,
   //     ImageFile: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400",
