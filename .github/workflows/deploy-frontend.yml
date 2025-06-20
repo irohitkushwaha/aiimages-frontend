@@ -81,17 +81,17 @@ jobs:
         timeout: 60s
         script: |
           # Stop existing app
-          pm2 delete aigeneratedimages-frontend || true
+          pm2 delete aigeneratedimagess-frontend || true
           
           # Backup current deployment
-          if [ -d "/var/www/aigeneratedimages-frontend" ]; then
-            sudo mv /var/www/aigeneratedimages-frontend /var/www/aigeneratedimages-frontend-backup-$(date +%Y%m%d-%H%M%S) || true
+          if [ -d "/var/www/aigeneratedimagess-frontend" ]; then
+            sudo mv /var/www/aigeneratedimagess-frontend /var/www/aigeneratedimagess-frontend-backup-$(date +%Y%m%d-%H%M%S) || true
           fi
           
           # Create fresh directory
-          sudo mkdir -p /var/www/aigeneratedimages-frontend
-          sudo chown -R $USER:$USER /var/www/aigeneratedimages-frontend
-          chmod 755 /var/www/aigeneratedimages-frontend
+          sudo mkdir -p /var/www/aigeneratedimagess-frontend
+          sudo chown -R $USER:$USER /var/www/aigeneratedimagess-frontend
+          chmod 755 /var/www/aigeneratedimagess-frontend
 
     - name: Upload deployment archive
       uses: appleboy/scp-action@v0.1.7
@@ -114,28 +114,28 @@ jobs:
           cd /var/www/
           
           # Extract files
-          tar -xzf deployment.tar.gz -C aigeneratedimages-frontend/
+          tar -xzf deployment.tar.gz -C aigeneratedimagess-frontend/
           rm deployment.tar.gz
           
           # Navigate to app directory
-          cd aigeneratedimages-frontend/
+          cd aigeneratedimagess-frontend/
           
           # Install production dependencies
           npm ci --omit=dev --silent
           
           # Start application with PM2
-          pm2 start npm --name aigeneratedimages-frontend -- start -- --port 3001
+          pm2 start npm --name aigeneratedimagess-frontend -- start -- --port 3001
           pm2 save
           
           # Wait for startup
           sleep 15
           
           # Verify app is running
-          if pm2 list | grep -q "aigeneratedimages-frontend.*online"; then
+          if pm2 list | grep -q "aigeneratedimagess-frontend.*online"; then
             echo "✅ Application started successfully"
           else
             echo "❌ Application failed to start"
-            pm2 logs aigeneratedimages-frontend --lines 10
+            pm2 logs aigeneratedimagess-frontend --lines 10
             exit 1
           fi
 
@@ -154,7 +154,7 @@ jobs:
             echo "✅ Health check passed"
           else
             echo "❌ Health check failed"
-            pm2 logs aigeneratedimages-frontend --lines 5
+            pm2 logs aigeneratedimagess-frontend --lines 5
             exit 1
           fi
 
@@ -181,5 +181,5 @@ jobs:
         script: |
           # Keep only last 3 backups
           cd /var/www/
-          ls -t aigeneratedimages-frontend-backup-* 2>/dev/null | tail -n +4 | xargs -r sudo rm -rf
+          ls -t aigeneratedimagess-frontend-backup-* 2>/dev/null | tail -n +4 | xargs -r sudo rm -rf
           echo "✅ Deployment completed successfully"
