@@ -1,44 +1,35 @@
-import Image from "next/image";
 import { getImageWithSimilar } from "@/api/getImageWithSimilar";
 import Button from "@/components/ui/button";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 
 export async function generateMetadata({ params }) {
-  try {
-    const resolvedParams = await params;
-    const slugValue = resolvedParams.slug
-    const imageData = await getImageWithSimilar(slugValue);
+  const { slug } = await params;
+  const imageData = await getImageWithSimilar(slug);
 
-    return {
+  return {
+    title: imageData.mainImage.PageTitle,
+    description: imageData.mainImage.PageDescription,
+    robots: "index, follow",
+    openGraph: {
       title: imageData.mainImage.PageTitle,
       description: imageData.mainImage.PageDescription,
-      robots: "index, follow",
-      openGraph: {
-        title: imageData.mainImage.PageTitle,
-        description: imageData.mainImage.PageDescription,
-        images: [
-          {
-            url: imageData.mainImage.ImageFile,
-            width: 1200,
-            height: 630,
-            alt: imageData.mainImage.Alt,
-          },
-        ],
-      },
-      twitter: {
-        card: "summary_large_image",
-        title: imageData.mainImage.PageTitle,
-        description: imageData.mainImage.PageDescription,
-        images: [imageData.mainImage.ImageFile],
-      },
-    };
-  } catch (error) {
-    return {
-      title: "Image Not Found",
-      description: "The requested image could not be found",
-      robots: "noindex, nofollow",
-    };
-  }
+      images: [
+        {
+          url: imageData.mainImage.ImageFile,
+          width: 1200,
+          height: 630,
+          alt: imageData.mainImage.Alt,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: imageData.mainImage.PageTitle,
+      description: imageData.mainImage.PageDescription,
+      images: [imageData.mainImage.ImageFile],
+    },
+  };
 }
 
 async function ImagePage({ params }) {
@@ -111,10 +102,10 @@ async function ImagePage({ params }) {
               key={image._id}
               className="mb-2 group relative break-inside-avoid overflow-hidden rounded-md shadow-md hover:shadow-xl transition-shadow duration-300 h-fit"
             >
-              <a
+              <Link
                 href={`/${getShortCategory(image.Category)}/${image.PageSlug}`}
                 rel="noopener noreferrer"
-                className="block w-full "
+                className="block w-full"
               >
                 <img
                   src={image.ImageFile}
@@ -124,22 +115,13 @@ async function ImagePage({ params }) {
                   loading="lazy"
                 />
 
-                {/* <Image
-                  src={image.ImageFile}
-                  alt={image.Alt}
-                  title={image.ImgTitle}
-                  fill
-                  className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
-                  sizes="100vw"
-                /> */}
-
                 {/* Hover overlay with title */}
                 <div className="absolute inset-0 hover:bg-black/50 transition-all duration-300 flex items-center justify-center">
                   <h2 className="text-white text-lg font-semibold text-center px-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-y-4 group-hover:translate-y-0">
                     {image.ImgTitle}
                   </h2>
                 </div>
-              </a>
+              </Link>
             </figure>
           ))}
         </section>
