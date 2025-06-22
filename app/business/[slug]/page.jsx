@@ -68,13 +68,13 @@ async function ImagePage({ params }) {
           {imageData.mainImage.PageTitle}
         </h1>
         <div className="w-full mx-auto pt-[20px] px-[10px]">
-          <figure className="w-full mx-auto">
+          <figure className="max-w-[1000px] mx-auto">
             <img
               src={imageData.mainImage.ImageFile}
               alt={imageData.mainImage.Alt}
               title={imageData.mainImage.ImgTitle}
               loading="lazy"
-              className="mx-auto"
+              className="w-full mx-auto"
               // className="w-full"
             />
             <figcaption className="text-center text-gray-800 text-[18px] font-semibold pt-[15px] pb-[30px] max-w-[1200px] mx-auto">
