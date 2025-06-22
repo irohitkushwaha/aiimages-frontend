@@ -1,4 +1,5 @@
 // app/food/page.jsx
+import Link from "next/link";
 export async function generateMetadata() {
     return {
       title: "Food AI Images - Culinary & Restaurant Photos",
@@ -44,7 +45,7 @@ export async function generateMetadata() {
               key={image._id}
               className="mb-2 group relative break-inside-avoid overflow-hidden rounded-md shadow-md hover:shadow-xl transition-shadow duration-300 h-fit"
             >
-              <a
+              <Link
                 href={`/${getShortCategory(image.Category)}/${image.PageSlug}`}
                 rel="noopener noreferrer"
                 className="block w-full"
@@ -63,7 +64,7 @@ export async function generateMetadata() {
                     {image.ImgTitle}
                   </h2>
                 </div>
-              </a>
+              </Link>
             </figure>
           ))}
         </section>
