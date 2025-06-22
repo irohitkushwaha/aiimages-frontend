@@ -29,9 +29,9 @@ jobs:
     - name: Setup Server Environment
       uses: appleboy/ssh-action@v1.0.3
       with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.SSH_KEY }}
+        host: ${{ secrets.DIGITALOCEAN_HOST }}
+        username: ${{ secrets.DIGITALOCEAN_USER }}
+        key: ${{ secrets.DIGITALOCEAN_SSH_KEY }}
         script: |
           mkdir -p /var/www/aigeneratedimagess.com
           npm install -g pm2 || echo "PM2 already installed"
@@ -39,18 +39,18 @@ jobs:
     - name: Deploy to Digital Ocean
       uses: appleboy/scp-action@v0.1.7
       with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.SSH_KEY }}
+        host: ${{ secrets.DIGITALOCEAN_HOST }}
+        username: ${{ secrets.DIGITALOCEAN_USER }}
+        key: ${{ secrets.DIGITALOCEAN_SSH_KEY }}
         source: ".next,package.json,package-lock.json,public,next.config.mjs"
         target: "/var/www/aigeneratedimagess.com/"
         
     - name: Restart Application
       uses: appleboy/ssh-action@v1.0.3
       with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.SSH_KEY }}
+        host: ${{ secrets.DIGITALOCEAN_HOST }}
+        username: ${{ secrets.DIGITALOCEAN_USER }}
+        key: ${{ secrets.DIGITALOCEAN_SSH_KEY }}
         script: |
           cd /var/www/aigeneratedimagess.com
           npm ci --production --ignore-scripts
