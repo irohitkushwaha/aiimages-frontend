@@ -60,7 +60,7 @@ export default function UploadImageComponent() {
     defaultValues: {
       alt: "",
       caption: "",
-      imagetitle: "",
+      imgtitle: "",
       category: "",
       pagetitle: "",
       pageslug: "",
@@ -148,7 +148,7 @@ export default function UploadImageComponent() {
       formData.append("Image", imageFile);
       formData.append("alt", data.alt);
       formData.append("caption", data.caption);
-      formData.append("imagetitle", data.imagetitle);
+      formData.append("imgtitle", data.imgtitle);
       formData.append("category", data.category);
       formData.append("pagetitle", data.pagetitle);
       formData.append("pageslug", data.pageslug);
@@ -292,7 +292,7 @@ export default function UploadImageComponent() {
                   </label>
                   <input
                     type="text"
-                    {...register("imagetitle", {
+                    {...register("imgtitle", {
                       required: "Image title is required",
                       minLength: {
                         value: 3,

@@ -1,4 +1,6 @@
 // app/business/page.jsx
+export const dynamic = 'force-dynamic';
+
 import { getCategoryImages } from "@/api/getCategoryImages";
 export async function generateMetadata() {
   return {

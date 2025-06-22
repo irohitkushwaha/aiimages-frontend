@@ -2,184 +2,56 @@ name: Deploy Next.js Frontend
 
 on:
   push:
-    branches: [ main, master ]
-  workflow_dispatch:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
-
+    
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-
-    - name: Set up Node.js
+      
+    - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '18'
         cache: 'npm'
-
+        
     - name: Install dependencies
       run: npm ci
-
+      
     - name: Build Next.js app
       run: npm run build
-
-    - name: Verify build files exist
-      run: |
-        echo "Checking build output..."
-        ls -la
-        if [ -d ".next" ]; then
-          echo "✅ .next directory exists"
-          ls -la .next/
-        else
-          echo "❌ .next directory not found"
-          exit 1
-        fi
-        
-        if [ -f "package.json" ]; then
-          echo "✅ package.json exists"
-        else
-          echo "❌ package.json not found"
-          exit 1
-        fi
-
-    - name: Create deployment archive
-      run: |
-        echo "Creating deployment archive..."
-        # Only include files that exist
-        FILES_TO_ARCHIVE=""
-        
-        # Always include these if they exist
-        [ -d ".next" ] && FILES_TO_ARCHIVE="$FILES_TO_ARCHIVE .next/"
-        [ -d "public" ] && FILES_TO_ARCHIVE="$FILES_TO_ARCHIVE public/"
-        [ -f "package.json" ] && FILES_TO_ARCHIVE="$FILES_TO_ARCHIVE package.json"
-        [ -f "package-lock.json" ] && FILES_TO_ARCHIVE="$FILES_TO_ARCHIVE package-lock.json"
-        [ -f "next.config.js" ] && FILES_TO_ARCHIVE="$FILES_TO_ARCHIVE next.config.js"
-        [ -f "next.config.mjs" ] && FILES_TO_ARCHIVE="$FILES_TO_ARCHIVE next.config.mjs"
-        
-        if [ -z "$FILES_TO_ARCHIVE" ]; then
-          echo "❌ No files found to archive"
-          exit 1
-        fi
-        
-        echo "Files to archive: $FILES_TO_ARCHIVE"
-        tar -czf deployment.tar.gz $FILES_TO_ARCHIVE
-        
-        echo "Archive created successfully:"
-        ls -lh deployment.tar.gz
-        echo "Archive contents:"
-        tar -tzf deployment.tar.gz | head -20
-
-    - name: Prepare server directory
+      
+    - name: Setup Server Environment
       uses: appleboy/ssh-action@v1.0.3
       with:
-        host: ${{ secrets.DIGITALOCEAN_HOST }}
-        username: ${{ secrets.DIGITALOCEAN_USER }}
-        key: ${{ secrets.DIGITALOCEAN_SSH_KEY }}
-        timeout: 60s
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_KEY }}
         script: |
-          # Stop existing app
-          pm2 delete aigeneratedimagess-frontend || true
+          mkdir -p /var/www/aigeneratedimagess.com
+          npm install -g pm2 || echo "PM2 already installed"
           
-          # Backup current deployment
-          if [ -d "/var/www/aigeneratedimagess-frontend" ]; then
-            sudo mv /var/www/aigeneratedimagess-frontend /var/www/aigeneratedimagess-frontend-backup-$(date +%Y%m%d-%H%M%S) || true
-          fi
-          
-          # Create fresh directory
-          sudo mkdir -p /var/www/aigeneratedimagess-frontend
-          sudo chown -R $USER:$USER /var/www/aigeneratedimagess-frontend
-          chmod 755 /var/www/aigeneratedimagess-frontend
-
-    - name: Upload deployment archive
+    - name: Deploy to Digital Ocean
       uses: appleboy/scp-action@v0.1.7
       with:
-        host: ${{ secrets.DIGITALOCEAN_HOST }}
-        username: ${{ secrets.DIGITALOCEAN_USER }}
-        key: ${{ secrets.DIGITALOCEAN_SSH_KEY }}
-        timeout: 300s
-        source: "deployment.tar.gz"
-        target: "/var/www/"
-
-    - name: Extract and setup application
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_KEY }}
+        source: ".next,package.json,package-lock.json,public,next.config.mjs"
+        target: "/var/www/aigeneratedimagess.com/"
+        
+    - name: Restart Application
       uses: appleboy/ssh-action@v1.0.3
       with:
-        host: ${{ secrets.DIGITALOCEAN_HOST }}
-        username: ${{ secrets.DIGITALOCEAN_USER }}
-        key: ${{ secrets.DIGITALOCEAN_SSH_KEY }}
-        timeout: 300s
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_KEY }}
         script: |
-          cd /var/www/
-          
-          # Extract files
-          tar -xzf deployment.tar.gz -C aigeneratedimagess-frontend/
-          rm deployment.tar.gz
-          
-          # Navigate to app directory
-          cd aigeneratedimagess-frontend/
-          
-          # Install production dependencies
-          npm ci --omit=dev --silent
-          
-          # Start application with PM2
-          pm2 start npm --name aigeneratedimagess-frontend -- start -- --port 3001
-          pm2 save
-          
-          # Wait for startup
-          sleep 15
-          
-          # Verify app is running
-          if pm2 list | grep -q "aigeneratedimagess-frontend.*online"; then
-            echo "✅ Application started successfully"
-          else
-            echo "❌ Application failed to start"
-            pm2 logs aigeneratedimagess-frontend --lines 10
-            exit 1
-          fi
-
-    - name: Health check
-      uses: appleboy/ssh-action@v1.0.3
-      with:
-        host: ${{ secrets.DIGITALOCEAN_HOST }}
-        username: ${{ secrets.DIGITALOCEAN_USER }}
-        key: ${{ secrets.DIGITALOCEAN_SSH_KEY }}
-        timeout: 60s
-        script: |
-          # Test application health
-          sleep 5
-          
-          if curl -f -s http://localhost:3001 > /dev/null; then
-            echo "✅ Health check passed"
-          else
-            echo "❌ Health check failed"
-            pm2 logs aigeneratedimagess-frontend --lines 5
-            exit 1
-          fi
-
-    - name: Reload nginx
-      uses: appleboy/ssh-action@v1.0.3
-      with:
-        host: ${{ secrets.DIGITALOCEAN_HOST }}
-        username: ${{ secrets.DIGITALOCEAN_USER }}
-        key: ${{ secrets.DIGITALOCEAN_SSH_KEY }}
-        timeout: 60s
-        script: |
-          # Test and reload nginx
-          sudo nginx -t && sudo systemctl reload nginx
-          echo "✅ Nginx reloaded"
-
-    - name: Cleanup old backups
-      if: success()
-      uses: appleboy/ssh-action@v1.0.3
-      with:
-        host: ${{ secrets.DIGITALOCEAN_HOST }}
-        username: ${{ secrets.DIGITALOCEAN_USER }}
-        key: ${{ secrets.DIGITALOCEAN_SSH_KEY }}
-        timeout: 60s
-        script: |
-          # Keep only last 3 backups
-          cd /var/www/
-          ls -t aigeneratedimagess-frontend-backup-* 2>/dev/null | tail -n +4 | xargs -r sudo rm -rf
-          echo "✅ Deployment completed successfully"
+          cd /var/www/aigeneratedimagess.com
+          npm ci --production --ignore-scripts
+          pm2 restart nextjs-frontend || pm2 start npm --name "nextjs-frontend" -- start

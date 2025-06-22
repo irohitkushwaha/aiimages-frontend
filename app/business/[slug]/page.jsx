@@ -7,8 +7,9 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }) {
   try {
-    const { slug } = await params;
-    const imageData = await getImageWithSimilar(slug);
+    const resolvedParams = await params;
+    const slugValue = resolvedParams.slug
+    const imageData = await getImageWithSimilar(slugValue);
 
     return {
       title: imageData.mainImage.PageTitle,

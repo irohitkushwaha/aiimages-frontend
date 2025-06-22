@@ -2,6 +2,7 @@
 import HeroSection from "../components/features/herosection";
 import ImagesList from "@/components/features/imagesList";
 import { getHomepageImages } from "@/api/getHomepageImages";
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata() {
   return {
