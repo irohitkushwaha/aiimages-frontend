@@ -48,7 +48,8 @@ export async function GET() {
     { fullCategory: "Food & Drink", shortCategory: "food" },
   ];
 
-  // Utility: Pass long category, get short category
+  // Utility: Pass long category, get short categoryy
+  
   function getShortCategory(fullCategory) {
     const found = categoryMap.find((c) => c.fullCategory === fullCategory);
     return found ? found.shortCategory : null;
