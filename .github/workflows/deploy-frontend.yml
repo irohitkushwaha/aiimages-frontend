@@ -115,6 +115,8 @@ jobs:
         username: ${{ secrets.DIGITALOCEAN_USER }}
         key: ${{ secrets.DIGITALOCEAN_SSH_KEY }}
         script: |
+          # Clean up existing deployment
+          rm -rf /var/www/aigeneratedimagess.com
           mkdir -p /var/www/aigeneratedimagess.com
           npm install -g pm2 || echo "PM2 already installed"
           
@@ -124,9 +126,10 @@ jobs:
         host: ${{ secrets.DIGITALOCEAN_HOST }}
         username: ${{ secrets.DIGITALOCEAN_USER }}
         key: ${{ secrets.DIGITALOCEAN_SSH_KEY }}
-        source: ".next/,package.json,package-lock.json,public/,next.config.mjs"
+        source: ".next,package.json,package-lock.json,public,next.config.mjs"
         target: "/var/www/aigeneratedimagess.com/"
         strip_components: 0
+        overwrite: true
         
     - name: ✅ VERIFY COPY - Check if files were copied to server
       uses: appleboy/ssh-action@v1.0.3
@@ -150,6 +153,12 @@ jobs:
             echo "❌ .next folder MISSING on server!"
             echo "🔍 Searching for .next in current directory:"
             find . -name ".next" -type d 2>/dev/null || echo "No .next folder found anywhere"
+            
+            # Additional debugging
+            echo "🔍 All contents in current directory:"
+            find . -maxdepth 2 -type d
+            echo "🔍 Hidden files:"
+            ls -la | grep "^\."
           fi
           
           echo "📄 Other files check:"
@@ -172,6 +181,8 @@ jobs:
           if [ ! -d ".next" ]; then
             echo "❌ CRITICAL ERROR: .next folder still missing!"
             echo "Cannot start application without build files"
+            echo "Current directory contents:"
+            ls -la
             exit 1
           fi
           
