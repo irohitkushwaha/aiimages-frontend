@@ -3,8 +3,6 @@ import { getImageWithSimilar } from "@/api/getImageWithSimilar";
 import Button from "@/components/ui/button";
 import { notFound } from "next/navigation";
 
-export const dynamic = "force-dynamic";
-
 export async function generateMetadata({ params }) {
   try {
     const resolvedParams = await params;
