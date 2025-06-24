@@ -1,5 +1,5 @@
 // api/baseUrl.js//
-//github
+//githubb
 const BASE_URL = "https://api.aigeneratedimagess.com/api" 
 // const BASE_URL = "http://localhost:9000/api" 
 
