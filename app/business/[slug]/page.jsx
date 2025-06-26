@@ -2,6 +2,7 @@ import { getImageWithSimilar } from "@/api/getImageWithSimilar";
 import Button from "@/components/ui/button";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import Image from "next/image";
 
 const categoryMap = [
   { fullCategory: "Business", shortCategory: "business" },
@@ -77,14 +78,25 @@ async function ImagePage({ params }) {
           {imageData.mainImage.PageTitle}
         </h1>
         <div className="w-full mx-auto pt-[20px] px-[10px]">
-          <figure className="max-w-[1000px] mx-auto">
-            <img
+          <figure
+            className="relative max-w-[1000px] mx-auto"
+            style={{ aspectRatio: "1000/630" }}
+          >
+            {/* <img
               src={imageData.mainImage.ImageFile}
               alt={imageData.mainImage.Alt}
               title={imageData.mainImage.ImgTitle}
               loading="lazy"
               className="w-full mx-auto"
               // className="w-full"
+            /> */}
+            <Image
+              src={imageData.mainImage.ImageFile}
+              alt={imageData.mainImage.Alt}
+              title={imageData.mainImage.ImgTitle}
+              fill
+              className="object-contain"
+              sizes="100vw"
             />
             <figcaption className="text-center text-gray-800 text-[18px] font-semibold pt-[15px] pb-[30px] max-w-[1200px] mx-auto">
               {imageData.mainImage.Caption}
@@ -113,15 +125,25 @@ async function ImagePage({ params }) {
             >
               <Link
                 href={`/${getShortCategory(image.Category)}/${image.PageSlug}`}
-                rel="noopener noreferrer"
+                rel="noopener noreferrer relative"
                 className="block w-full"
+                style={{ aspectRatio: "4/3" }}
               >
-                <img
+                {/* <img
                   src={image.ImageFile}
                   alt={image.Alt}
                   title={image.ImgTitle}
                   className="w-full object-cover transition-transform duration-300 group-hover:scale-105"
                   loading="lazy"
+                /> */}
+
+                <Image
+                  src={image.ImageFile}
+                  alt={image.Alt}
+                  title={image.ImgTitle}
+                  fill
+                  className="object-cover transition-transform duration-300 group-hover:scale-105 rounded-md"
+                  sizes="(max-width: 768px) 100vw, 25vw"
                 />
 
                 {/* Hover overlay with title */}
