@@ -3,17 +3,46 @@ import Button from "@/components/ui/button";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+const categoryMap = [
+  { fullCategory: "Business", shortCategory: "business" },
+  { fullCategory: "Finance", shortCategory: "finance" },
+  { fullCategory: "Education & Learning", shortCategory: "education" },
+  { fullCategory: "Technology", shortCategory: "technology" },
+  { fullCategory: "Festivals & occasions", shortCategory: "festivals" },
+  { fullCategory: "Fashion & beauty", shortCategory: "fashion" },
+  { fullCategory: "Travel, Lifestyle & Nature", shortCategory: "nature" },
+  {
+    fullCategory: "Home Design & Real Estate",
+    shortCategory: "real-estate",
+  },
+  { fullCategory: "Food & Drink", shortCategory: "food" },
+];
+
+function getShortCategory(fullCategory) {
+  const found = categoryMap.find((c) => c.fullCategory === fullCategory);
+  return found ? found.shortCategory : null;
+}
+
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const imageData = await getImageWithSimilar(slug);
+
+  const baseUrl = "https://aigeneratedimagess.com";
+  const shortCategory = getShortCategory(imageData.mainImage.Category);
+
+  const canonicalUrl = `${baseUrl}/${shortCategory}/${slug}`;
 
   return {
     title: imageData.mainImage.PageTitle,
     description: imageData.mainImage.PageDescription,
     robots: "index, follow",
+    alternates: {
+      canonical: canonicalUrl,
+    },
     openGraph: {
       title: imageData.mainImage.PageTitle,
       description: imageData.mainImage.PageDescription,
+      url: canonicalUrl,
       images: [
         {
           url: imageData.mainImage.ImageFile,
@@ -42,26 +71,6 @@ async function ImagePage({ params }) {
   const imageData = await getImageWithSimilar(slug);
 
   try {
-    const categoryMap = [
-      { fullCategory: "Business", shortCategory: "business" },
-      { fullCategory: "Finance", shortCategory: "finance" },
-      { fullCategory: "Education & Learning", shortCategory: "education" },
-      { fullCategory: "Technology", shortCategory: "technology" },
-      { fullCategory: "Festivals & occasions", shortCategory: "festivals" },
-      { fullCategory: "Fashion & beauty", shortCategory: "fashion" },
-      { fullCategory: "Travel, Lifestyle & Nature", shortCategory: "nature" },
-      {
-        fullCategory: "Home Design & Real Estate",
-        shortCategory: "real-estate",
-      },
-      { fullCategory: "Food & Drink", shortCategory: "food" },
-    ];
-
-    // Utility: Pass long category, get short category
-    function getShortCategory(fullCategory) {
-      const found = categoryMap.find((c) => c.fullCategory === fullCategory);
-      return found ? found.shortCategory : null;
-    }
     return (
       <div className="w-full py-2">
         <h1 className="text-center font-bold md:text-[32px] text-[27px] text-gray-900 py-[15px] capitalize px-[10px]">
