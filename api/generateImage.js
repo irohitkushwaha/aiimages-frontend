@@ -17,13 +17,15 @@ export async function generateImage({ prompt, imageFile }) {
 
   const res = await fetch(`${BASE_URL}/image/generate`, {
     method: "POST",
-    credentials: "include", // send cookies for JWT auth
+    // credentials: "include", // send cookies for JWT auth
     body: formData,
     headers: {
       'Accept': 'application/json'
       // Do NOT set Content-Type! Let the browser set it for multipart/form-data.
     }
   });
+
+  console.log("response from api call is for img generation", res)
 
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));

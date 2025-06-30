@@ -66,6 +66,7 @@ const AiImageGenerator = () => {
       console.log("response is", response)
       setGeneratedImage(response.imageBase64); 
     } catch (error) {
+      console.log("consoling error", error)
       setFileError(error.message || "Failed to generate image");
     } finally {
       setIsGenerating(false);
