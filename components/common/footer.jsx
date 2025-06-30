@@ -87,6 +87,14 @@ const Footer = () => {
                     Refund policy
                   </a>
                 </li>
+                <li>
+                  <a
+                    href="/copyright-ruling"
+                    className="text-gray-300 hover:text-white transition-colors"
+                  >
+                    Copyright Ruling
+                  </a>
+                </li>
               </ul>
             </div>
 
