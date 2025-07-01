@@ -142,6 +142,12 @@ export default function Header() {
           >
             Upload
           </Link>
+          <Link
+            href="/ai-image-generator-from-image"
+            className="text-[16px] font-semibold text-gray-800"
+          >
+            AI Img to Img
+          </Link>
         </PopoverGroup>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
           <Link
@@ -223,7 +229,7 @@ export default function Header() {
                   className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  AI Img to Img{" "}
+                  AI Img to Img
                 </Link>
               </div>
               <div className="py-6">
