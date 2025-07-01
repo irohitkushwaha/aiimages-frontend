@@ -34,17 +34,17 @@ export async function generateImage({ prompt, imageFile }) {
   const responseData = await res.json();
   console.log("Response data:", responseData);
 
-  // Fix: Properly format the base64 data for display
-  if (responseData.imageBase64) {
-    // Check if the base64 data already has the data URL prefix
-    if (responseData.imageBase64.startsWith("data:image/")) {
-      return responseData;
-    } else {
-      // Add the data URL prefix for base64 data
-      responseData.imageBase64 = `data:image/png;base64,${responseData.imageBase64}`;
-      return responseData;
-    }
-  }
+  // // Fix: Properly format the base64 data for display
+  // if (responseData.imageBase64) {
+  //   // Check if the base64 data already has the data URL prefix
+  //   if (responseData.imageBase64.startsWith("data:image/")) {
+  //     return responseData;
+  //   } else {
+  //     // Add the data URL prefix for base64 data
+  //     responseData.imageBase64 = `data:image/png;base64,${responseData.imageBase64}`;
+  //     return responseData;
+  //   }
+  // }
 
-  return responseData;
+  return responseData.data;
 }
