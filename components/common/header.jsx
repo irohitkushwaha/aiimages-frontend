@@ -136,12 +136,18 @@ export default function Header() {
           >
             Pricing
           </Link>
-          <Link href="/upload" className="text-[16px] font-semibold text-gray-800">
+          <Link
+            href="/upload"
+            className="text-[16px] font-semibold text-gray-800"
+          >
             Upload
           </Link>
         </PopoverGroup>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <Link href="/login" className="text-[16px] font-semibold text-gray-800">
+          <Link
+            href="/login"
+            className="text-[16px] font-semibold text-gray-800"
+          >
             Log in{" "}
             <span className="text-[22px]" aria-hidden="true">
               &rarr;
@@ -211,6 +217,13 @@ export default function Header() {
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   Upload
+                </Link>
+                <Link
+                  href="/ai-image-generator-from-image"
+                  className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  AI Img to Img{" "}
                 </Link>
               </div>
               <div className="py-6">
