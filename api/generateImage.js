@@ -20,16 +20,31 @@ export async function generateImage({ prompt, imageFile }) {
     // credentials: "include", // send cookies for JWT auth
     body: formData,
     headers: {
-      'Accept': 'application/json'
+      Accept: "application/json",
       // Do NOT set Content-Type! Let the browser set it for multipart/form-data.
-    }
+    },
   });
 
-  console.log("response from api call is for img generation", res)
+  console.log("response from api call is for img generation", res);
 
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
     throw new Error(err.message || "Failed to generate image");
   }
-  return res.json();
+  const responseData = await res.json();
+  console.log("Response data:", responseData);
+
+  // Fix: Properly format the base64 data for display
+  if (responseData.imageBase64) {
+    // Check if the base64 data already has the data URL prefix
+    if (responseData.imageBase64.startsWith("data:image/")) {
+      return responseData;
+    } else {
+      // Add the data URL prefix for base64 data
+      responseData.imageBase64 = `data:image/png;base64,${responseData.imageBase64}`;
+      return responseData;
+    }
+  }
+
+  return responseData;
 }
