@@ -129,7 +129,6 @@ export default function Header() {
               </>
             )}
           </Popover>
-
           <Link
             href="/pricing"
             className="text-[16px] font-semibold text-gray-800"

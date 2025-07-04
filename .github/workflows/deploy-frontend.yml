@@ -57,9 +57,9 @@ jobs:
         key: ${{ secrets.DIGITALOCEAN_SSH_KEY }}
         script: |
           # Clean up existing deployment
-          rm -rf /var/www/aigeneratedimagess.com
-          mkdir -p /var/www/aigeneratedimagess.com
-          npm install -g pm2 || echo "PM2 already installed"
+          sudo rm -rf /var/www/aigeneratedimagess.com
+          sudo mkdir -p /var/www/aigeneratedimagess.com
+          sudo npm install -g pm2 || echo "PM2 already installed"
           
     - name: 🚀 Deploy to Digital Ocean
       uses: appleboy/scp-action@v0.1.7
@@ -131,13 +131,13 @@ jobs:
           
           # Install production dependencies
           echo "📦 Installing production dependencies..."
-          npm ci --production --ignore-scripts
+          sudo npm ci --production --ignore-scripts
           
           # Start/restart the application
           echo "🚀 Starting application..."
-          pm2 restart nextjs-frontend || pm2 start npm --name "nextjs-frontend" -- start
+          sudo pm2 restart nextjs-frontend || sudo pm2 start npm --name "nextjs-frontend" -- start
           
           # Show final status
           echo "=== DEPLOYMENT STATUS ==="
-          pm2 status
-          pm2 logs nextjs-frontend --lines 10 --nostream
+          sudo pm2 status
+          sudo pm2 logs nextjs-frontend --lines 10 --nostream
