@@ -162,9 +162,9 @@ jobs:
           
           # Start/restart the application
           echo "🚀 Starting application..."
-          sudo pm2 restart nextjs-frontend || sudo pm2 start npm --name "nextjs-frontend" -- start
+          pm2 restart nextjs-frontend || pm2 start npm --name "nextjs-frontend" -- start
           
           # Show final status
           echo "=== DEPLOYMENT STATUS ==="
-          sudo pm2 status
-          sudo pm2 logs nextjs-frontend --lines 10 --nostream
+          pm2 status
+          pm2 logs nextjs-frontend --lines 10 --nostream
