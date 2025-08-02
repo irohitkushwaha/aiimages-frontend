@@ -48,6 +48,11 @@ jobs:
         echo "📄 package-lock.json:" && ls -la package-lock.json
         echo "📁 public folder:" && ls -la public/ | head -5
         echo "📄 next.config.mjs:" && ls -la next.config.mjs
+
+    - name: Add Server Host Key to Known Hosts
+      run: |
+        mkdir -p ~/.ssh
+        ssh-keyscan -H ${{ secrets.DIGITALOCEAN_HOST }} >> ~/.ssh/known_hosts
         
     - name: Setup Server Environment
       uses: appleboy/ssh-action@v1.0.3
