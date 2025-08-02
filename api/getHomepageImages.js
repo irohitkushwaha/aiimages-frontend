@@ -7,7 +7,7 @@ import BASE_URL from "./baseUrl";
 //     console.log("response for gethomepageimage", res)
 //     if (!res.ok) throw new Error("Failed to fetch images error from next js api error");
 //     const data = await res.json();
-//     return data.data;
+//     return data.data;,
 //   }
 
 export async function getHomepageImages(page = 0) {
