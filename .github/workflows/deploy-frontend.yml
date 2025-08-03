@@ -213,128 +213,29 @@ jobs:
     - name: Build Next.js app
       run: npm run build
       
-    - name: ✅ VERIFY BUILD - Check if .next folder exists
+    - name: ✅ Verify Build
       run: |
         echo "=== BUILD VERIFICATION ==="
         if [ -d ".next" ]; then
           echo "✅ .next folder EXISTS"
-          ls -la .next/ | head -10
-          echo "Total files in .next: $(find .next -type f | wc -l)"
+          echo "Build files: $(find .next -type f | wc -l)"
         else
           echo "❌ .next folder MISSING - Build failed!"
           exit 1
         fi
-        
-    - name: ✅ VERIFY FILES - List all files to be copied
-      run: |
-        echo "=== FILES TO BE COPIED ==="
-        echo "📁 .next folder:"
-        ls -la .next/ | head -5
-        echo "📄 package.json:" && ls -la package.json
-        echo "📄 package-lock.json:" && ls -la package-lock.json
-        echo "📁 public folder:" && ls -la public/ | head -5
-        echo "📄 next.config.mjs:" && ls -la next.config.mjs
 
-    # ========== DEBUGGING SECTION START ==========
-    
-    - name: 🔍 DEBUG - Install network tools
+    - name: 🔍 Pre-deployment Connection Test
       run: |
-        sudo apt-get update
-        sudo apt-get install -y netcat-openbsd dnsutils iputils-ping
-
-    - name: 🔍 DEBUG - Get Runner Info
-      run: |
-        echo "=== GITHUB RUNNER DEBUG INFO ==="
-        echo "🌐 Runner Public IP: $(curl -s https://ifconfig.me)"
-        echo "🕐 Current Time: $(date)"
-        echo "🌍 Runner Location Info:"
-        curl -s "https://ipapi.co/$(curl -s https://ifconfig.me)/json/" | jq '.' || echo "Location info unavailable"
-        echo "🔧 Runner OS Info:"
-        uname -a
-        cat /etc/os-release | head -5
-
-    - name: 🔍 DEBUG - Test DNS Resolution
-      run: |
-        echo "=== DNS RESOLUTION TEST ==="
-        echo "🔍 Testing DNS resolution for: ${{ secrets.DIGITALOCEAN_HOST }}"
-        nslookup ${{ secrets.DIGITALOCEAN_HOST }} || echo "❌ DNS resolution failed"
-        dig ${{ secrets.DIGITALOCEAN_HOST }} || echo "❌ DIG command failed"
-        
-    - name: 🔍 DEBUG - Test Network Connectivity
-      run: |
-        echo "=== NETWORK CONNECTIVITY TEST ==="
-        echo "🔗 Testing connectivity to ${{ secrets.DIGITALOCEAN_HOST }}:22"
-        nc -zv ${{ secrets.DIGITALOCEAN_HOST }} 22 || echo "❌ Port 22 not reachable"
-        echo "🏓 Testing ping connectivity:"
-        ping -c 3 ${{ secrets.DIGITALOCEAN_HOST }} || echo "❌ Ping failed"
-        echo "🔍 Testing connectivity to port 80:"
-        nc -zv ${{ secrets.DIGITALOCEAN_HOST }} 80 || echo "❌ Port 80 not reachable"
-
-    - name: 🔍 DEBUG - Validate SSH Key Format
-      run: |
-        echo "=== SSH KEY VALIDATION ==="
-        mkdir -p ~/.ssh
-        echo "${{ secrets.DIGITALOCEAN_SSH_KEY }}" > ~/.ssh/debug_key
-        chmod 600 ~/.ssh/debug_key
-        
-        echo "🔑 SSH Key Info:"
-        echo "Key length: $(echo '${{ secrets.DIGITALOCEAN_SSH_KEY }}' | wc -c)"
-        echo "Key type check:"
-        ssh-keygen -l -f ~/.ssh/debug_key || echo "❌ Invalid SSH key format"
-        
-        echo "🔍 Key header/footer check:"
-        head -1 ~/.ssh/debug_key
-        tail -1 ~/.ssh/debug_key
-        
-        echo "🔧 Key permissions:"
-        ls -la ~/.ssh/debug_key
-
-    - name: 🔍 DEBUG - Manual SSH Test with Verbose Output
-      run: |
-        echo "=== MANUAL SSH CONNECTION TEST ==="
-        mkdir -p ~/.ssh
-        echo "${{ secrets.DIGITALOCEAN_SSH_KEY }}" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
-        
-        echo "🔍 Testing SSH connection with maximum verbosity:"
-        ssh -vvv \
-          -o StrictHostKeyChecking=no \
-          -o UserKnownHostsFile=/dev/null \
-          -o ConnectTimeout=30 \
-          -o ServerAliveInterval=10 \
-          -o ServerAliveCountMax=3 \
-          -i ~/.ssh/id_rsa \
-          ${{ secrets.DIGITALOCEAN_USER }}@${{ secrets.DIGITALOCEAN_HOST }} \
-          "echo 'SSH connection successful'; whoami; uname -a; date" || echo "❌ Manual SSH test failed"
-
-    # ========== DEBUGGING SECTION END ==========
+        echo "=== CONNECTION TEST ==="
+        echo "Testing connectivity to ${{ secrets.DIGITALOCEAN_HOST }}:22"
+        nc -zv ${{ secrets.DIGITALOCEAN_HOST }} 22 || (echo "❌ SSH port not reachable" && exit 1)
+        echo "✅ SSH port is reachable"
 
     - name: Add Server Host Key to Known Hosts
       run: |
         mkdir -p ~/.ssh
-        echo "🔑 Adding server host key to known_hosts..."
-        ssh-keyscan -H ${{ secrets.DIGITALOCEAN_HOST }} >> ~/.ssh/known_hosts || echo "❌ Host key scan failed"
-        echo "✅ Known hosts updated"
-        cat ~/.ssh/known_hosts
-        
-    - name: 🔍 DEBUG - Test appleboy SSH action basic connection
-      uses: appleboy/ssh-action@v1.0.3
-      with:
-        host: ${{ secrets.DIGITALOCEAN_HOST }}
-        username: ${{ secrets.DIGITALOCEAN_USER }}
-        key: ${{ secrets.DIGITALOCEAN_SSH_KEY }}
-        debug: true
-        script: |
-          echo "=== APPLEBOY SSH ACTION DEBUG ==="
-          echo "✅ SSH connection successful via appleboy action!"
-          echo "🏠 Current user: $(whoami)"
-          echo "📂 Current directory: $(pwd)"
-          echo "🕐 Server time: $(date)"
-          echo "💾 Server info: $(uname -a)"
-          echo "💽 Disk space:"
-          df -h | head -5
-          echo "🔧 Server uptime: $(uptime)"
-        
+        ssh-keyscan -H ${{ secrets.DIGITALOCEAN_HOST }} >> ~/.ssh/known_hosts
+
     - name: Setup Server Environment
       uses: appleboy/ssh-action@v1.0.3
       with:
@@ -343,22 +244,13 @@ jobs:
         key: ${{ secrets.DIGITALOCEAN_SSH_KEY }}
         debug: true
         script: |
-          echo "=== SETTING UP SERVER ENVIRONMENT ==="
           # Clean up existing deployment
-          echo "🧹 Cleaning up existing deployment..."
           sudo rm -rf /var/www/aigeneratedimagess.com
           sudo mkdir -p /var/www/aigeneratedimagess.com
-          echo "✅ Directory created"
-          
-          echo "📦 Checking PM2 installation..."
-          if ! command -v pm2 &> /dev/null; then
-            echo "Installing PM2..."
-            sudo npm install -g pm2
-          else
-            echo "✅ PM2 already installed: $(pm2 --version)"
-          fi
+          # Install PM2 if not present
+          sudo npm install -g pm2 || echo "PM2 already installed"
 
-    - name: Create deployment directory with proper permissions
+    - name: Create Deployment Directory
       uses: appleboy/ssh-action@v1.0.3
       with:
         host: ${{ secrets.DIGITALOCEAN_HOST }}
@@ -366,46 +258,11 @@ jobs:
         key: ${{ secrets.DIGITALOCEAN_SSH_KEY }}
         debug: true
         script: |
-          echo "=== CREATING DEPLOYMENT DIRECTORY ==="
           sudo mkdir -p /var/www/aigeneratedimagess.com
           sudo chown -R ${{ secrets.DIGITALOCEAN_USER }}: /var/www/aigeneratedimagess.com
           sudo chmod -R 755 /var/www/aigeneratedimagess.com
-          
-          echo "📂 Directory permissions:"
-          ls -la /var/www/ | grep aigeneratedimagess.com
-          
-          echo "💾 Available disk space:"
-          df -h /var/www/
-          
-    - name: 🔍 DEBUG - Test SCP connection before actual deployment
-      uses: appleboy/scp-action@v0.1.7
-      with:
-        host: ${{ secrets.DIGITALOCEAN_HOST }}
-        username: ${{ secrets.DIGITALOCEAN_USER }}
-        key: ${{ secrets.DIGITALOCEAN_SSH_KEY }}
-        source: "package.json"
-        target: "/tmp/"
-        overwrite: true
-        debug: true
-        
-    - name: 🔍 DEBUG - Verify test SCP worked
-      uses: appleboy/ssh-action@v1.0.3
-      with:
-        host: ${{ secrets.DIGITALOCEAN_HOST }}
-        username: ${{ secrets.DIGITALOCEAN_USER }}
-        key: ${{ secrets.DIGITALOCEAN_SSH_KEY }}
-        debug: true
-        script: |
-          echo "=== VERIFYING TEST SCP ==="
-          if [ -f "/tmp/package.json" ]; then
-            echo "✅ Test SCP successful - package.json found in /tmp/"
-            ls -la /tmp/package.json
-          else
-            echo "❌ Test SCP failed - package.json not found in /tmp/"
-            ls -la /tmp/ | grep -i package || echo "No package files found"
-          fi
-          
-    - name: 🚀 Deploy to Digital Ocean
+
+    - name: 🚀 Deploy Files to Server
       uses: appleboy/scp-action@v0.1.7
       with:
         host: ${{ secrets.DIGITALOCEAN_HOST }}
@@ -417,7 +274,7 @@ jobs:
         overwrite: true
         debug: true
 
-    - name: Fix permissions after copy
+    - name: Fix Permissions
       uses: appleboy/ssh-action@v1.0.3
       with:
         host: ${{ secrets.DIGITALOCEAN_HOST }}
@@ -425,16 +282,12 @@ jobs:
         key: ${{ secrets.DIGITALOCEAN_SSH_KEY }}
         debug: true
         script: |
-          echo "=== FIXING PERMISSIONS AFTER COPY ==="
           sudo chown -R ${{ secrets.DIGITALOCEAN_USER }}: /var/www/aigeneratedimagess.com
           sudo chmod -R 755 /var/www/aigeneratedimagess.com
           sudo find /var/www/aigeneratedimagess.com -type d -exec chmod 755 {} \;
           sudo find /var/www/aigeneratedimagess.com -type f -exec chmod 644 {} \;
-          
-          echo "📂 Final directory permissions:"
-          ls -la /var/www/aigeneratedimagess.com/
 
-    - name: ✅ VERIFY COPY - Check if files were copied to server
+    - name: ✅ Verify Deployment
       uses: appleboy/ssh-action@v1.0.3
       with:
         host: ${{ secrets.DIGITALOCEAN_HOST }}
@@ -442,90 +295,41 @@ jobs:
         key: ${{ secrets.DIGITALOCEAN_SSH_KEY }}
         debug: true
         script: |
-          echo "=== SERVER FILE VERIFICATION ==="
           cd /var/www/aigeneratedimagess.com
           
-          echo "📁 Current directory contents:"
-          ls -la
-          
+          echo "=== DEPLOYMENT VERIFICATION ==="
           if [ -d ".next" ]; then
-            echo "✅ .next folder EXISTS on server"
-            echo "📊 .next contents:"
-            ls -la .next/ | head -10
-            echo "Total files in .next: $(find .next -type f 2>/dev/null | wc -l)"
+            echo "✅ .next folder deployed successfully"
+            echo "Files in .next: $(find .next -type f 2>/dev/null | wc -l)"
           else
-            echo "❌ .next folder MISSING on server!"
-            echo "🔍 Searching for .next in current directory:"
-            find . -name ".next" -type d 2>/dev/null || echo "No .next folder found anywhere"
-            
-            # Additional debugging
-            echo "🔍 All contents in current directory:"
-            find . -maxdepth 2 -type d
-            echo "🔍 Hidden files:"
-            ls -la | grep "^\."
-          fi
-          
-          echo "📄 Other files check:"
-          [ -f "package.json" ] && echo "✅ package.json exists" || echo "❌ package.json missing"
-          [ -f "next.config.mjs" ] && echo "✅ next.config.mjs exists" || echo "❌ next.config.mjs missing"
-          [ -d "public" ] && echo "✅ public folder exists" || echo "❌ public folder missing"
-        
-    - name: 🔧 Restart Application
-      uses: appleboy/ssh-action@v1.0.3
-      with:
-        host: ${{ secrets.DIGITALOCEAN_HOST }}
-        username: ${{ secrets.DIGITALOCEAN_USER }}
-        key: ${{ secrets.DIGITALOCEAN_SSH_KEY }}
-        debug: true
-        script: |
-          cd /var/www/aigeneratedimagess.com
-          
-          echo "=== FINAL DEPLOYMENT CHECK ==="
-          
-          # Final verification before starting
-          if [ ! -d ".next" ]; then
-            echo "❌ CRITICAL ERROR: .next folder still missing!"
-            echo "Cannot start application without build files"
-            echo "Current directory contents:"
-            ls -la
+            echo "❌ .next folder missing - deployment failed!"
             exit 1
           fi
           
-          echo "✅ All files verified, proceeding with deployment..."
+          # Check other required files
+          [ -f "package.json" ] && echo "✅ package.json deployed" || echo "❌ package.json missing"
+          [ -f "next.config.mjs" ] && echo "✅ next.config.mjs deployed" || echo "❌ next.config.mjs missing"
+          [ -d "public" ] && echo "✅ public folder deployed" || echo "❌ public folder missing"
+
+    - name: 🚀 Start Application
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.DIGITALOCEAN_HOST }}
+        username: ${{ secrets.DIGITALOCEAN_USER }}
+        key: ${{ secrets.DIGITALOCEAN_SSH_KEY }}
+        debug: true
+        script: |
+          cd /var/www/aigeneratedimagess.com
           
           # Install production dependencies
-          echo "📦 Installing production dependencies..."
+          echo "📦 Installing dependencies..."
           sudo npm ci --production --ignore-scripts
           
           # Start/restart the application
           echo "🚀 Starting application..."
           pm2 restart nextjs-frontend || pm2 start npm --name "nextjs-frontend" -- start
           
-          # Show final status
-          echo "=== DEPLOYMENT STATUS ==="
+          # Show status
+          echo "=== APPLICATION STATUS ==="
           pm2 status
-          pm2 logs nextjs-frontend --lines 10 --nostream
-
-    # ========== FINAL DEBUG SECTION ==========
-    
-    - name: 🔍 DEBUG - Final System Status
-      uses: appleboy/ssh-action@v1.0.3
-      with:
-        host: ${{ secrets.DIGITALOCEAN_HOST }}
-        username: ${{ secrets.DIGITALOCEAN_USER }}
-        key: ${{ secrets.DIGITALOCEAN_SSH_KEY }}
-        debug: true
-        script: |
-          echo "=== FINAL SYSTEM STATUS ==="
-          echo "🔧 System Load:"
-          uptime
-          echo "💾 Memory Usage:"
-          free -h
-          echo "💽 Disk Usage:"
-          df -h /var/www/
-          echo "🌐 Network Status:"
-          netstat -tlnp | grep :3000 || echo "Port 3000 not listening"
-          echo "📋 PM2 Status:"
-          pm2 status
-          echo "📝 Recent PM2 Logs:"
-          pm2 logs nextjs-frontend --lines 5 --nostream || echo "No PM2 logs available"
+          echo "✅ Deployment completed successfully!"
