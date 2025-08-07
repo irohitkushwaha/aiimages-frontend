@@ -51,9 +51,9 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import TypewriterEffect from "../features/typewritereffect";
 
-export default function SearchBar() {
+export default function SearchBar({query}) {
   const [placeholder, setPlaceholder] = useState("Search AI Generated Images");
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState(query);
   const router = useRouter();
 
   const handleSearch = () => {

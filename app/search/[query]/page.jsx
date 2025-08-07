@@ -49,7 +49,7 @@ export default async function Search({ params }) {
 
   return (
     <div>
-      <HeroSection />
+      <HeroSection query={query} />
 
       {isLoading ? (
         <LoadingSpinner />

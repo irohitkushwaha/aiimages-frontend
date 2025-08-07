@@ -1,6 +1,6 @@
 import SearchBar from "../ui/searchbar";
 
-const HeroSection = () => {
+const HeroSection = ({query}) => {
   return (
     <div className="bg-white">
       {/* Hero Section with Grid Background */}
@@ -32,7 +32,7 @@ const HeroSection = () => {
               </p> */}
             </div>
             <div className="w-full">
-              <SearchBar />
+              <SearchBar query={query}/>
             </div>
           </div>
         </div>
