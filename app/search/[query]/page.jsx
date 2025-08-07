@@ -13,6 +13,8 @@ export default async function Search({ params }) {
     // Fetch search results on the server (SSR)
     const searchResults = await searchAiImages(query);
 
+    console.log("value of search Results is", searchResults)
+
     // Extract the data from the API response
     // Assuming your API returns { success: true, data: [...], message: "..." }
     initialImages = searchResults.data || [];
