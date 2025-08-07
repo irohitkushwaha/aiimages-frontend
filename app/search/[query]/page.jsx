@@ -1,5 +1,5 @@
-import HeroSection from "@components/features/herosection";
-import ImagesList from "@components/features/imagesList";
+import HeroSection from "@/components/features/herosection";
+import ImagesList from "@/components/features/imagesList";
 import { searchAiImages } from "@/api/searchImages";
 
 export default async function Search({ params }) {
